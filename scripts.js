@@ -427,7 +427,7 @@ class BulbWhale extends Enemy {
         this.y = Math.random() * (this.game.height * 0.95 - this.height) 
         this.image = document.querySelector('#bulbwhale') 
         this.frameY = Math.floor(Math.random()*2)
-        this.lives = 20 
+        this.lives = 15 
         this.score = this.lives 
         this.speedX = Math.random() * -1.2 - 0.1
     } 
@@ -839,4 +839,5 @@ startBtn.addEventListener('click', () => {
     gameStarted = true;
 });
         animate(0) 
+
     })
