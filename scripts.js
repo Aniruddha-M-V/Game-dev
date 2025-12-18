@@ -47,6 +47,8 @@ class SoundController {
         this.powerDownSound = document.querySelector('#powerdown');
         this.shieldSound = document.querySelector('#shieldSound');
         this.shotSound = document.querySelector('#shot');
+        this.youWinSound = document.querySelector('#youWin');
+        this.youLoseSound = document.querySelector('#youLose');
     }
     powerUp(){
         this.powerUpSound.currentTime = 0;
@@ -71,6 +73,14 @@ class SoundController {
     shield(){
         this.shieldSound.currentTime = 0;
         this.shieldSound.play()
+    }
+    youWin(){
+        this.youWinSound.currentTime = 0;
+        this.youWinSound.play()
+    }
+    youLose(){
+        this.youLoseSound.currentTime = 0;
+        this.youLoseSound.play()
     }
 }
 
@@ -427,7 +437,7 @@ class BulbWhale extends Enemy {
         this.y = Math.random() * (this.game.height * 0.95 - this.height) 
         this.image = document.querySelector('#bulbwhale') 
         this.frameY = Math.floor(Math.random()*2)
-        this.lives = 15 
+        this.lives = 15
         this.score = this.lives 
         this.speedX = Math.random() * -1.2 - 0.1
     } 
@@ -606,12 +616,13 @@ if(this.game.gameOver){
 context.textAlign = 'center' 
 let message1 
 let message2 
-if(this.game.score >= this.game.winningScore){
-     message1 = 'SYSTEM ONLINE…' 
-     message2 = 'The depths are conquered' 
+if(this.game.score >= this.game.winningScore)
+    {
+        message1 = 'SYSTEM ONLINE…' 
+        message2 = 'The depths are conquered' 
     } 
     else 
-        { 
+        {
             message1 = 'SYSTEM FAILURE…' 
             message2 = 'reboot to try again'
         } 
@@ -655,6 +666,7 @@ this.ammoTimer = 0
 this.ammoInterval = 350 
 this.maxAmmo = 50 
 this.gameOver = false 
+this.gameOverSoundPlayed = false
 this.score = 0 
 this.winningScore = 80 
 this.gameTime = 0
@@ -676,6 +688,7 @@ restart() {
     this.ammo = 20
     this.ammoTimer = 0
     this.gameOver = false
+    this.gameOverSoundPlayed = false
     this.score = 0
     this.gameTime = 0
     this.keys = []
@@ -683,7 +696,18 @@ restart() {
 
 update(deltaTime) {
 if(!this.gameOver) this.gameTime += deltaTime 
-if(this.gameTime > this.timeLimit) this.gameOver = true 
+if(this.gameTime > this.timeLimit) {
+    this.gameOver = true
+    
+    if(!this.gameOverSoundPlayed) {
+        if(this.score >= this.winningScore) {
+            this.sound.youWin()
+        } else {
+            this.sound.youLose()
+        }
+        this.gameOverSoundPlayed = true
+    }
+}
 this.background.update() 
 this.background.layer4.update() 
 this.player.update(deltaTime) 
@@ -839,5 +863,4 @@ startBtn.addEventListener('click', () => {
     gameStarted = true;
 });
         animate(0) 
-
     })
